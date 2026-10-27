@@ -19,4 +19,28 @@ test('deve pesquisar uma concessionária pelo nome', async ({
     await expect(resultado).toBeVisible();
     await expect(resultado).toContainText('Av. Raja Gabaglia');
     await expect(resultado).toContainText('Belo Horizonte');
-});
+    }
+);
+
+test('não deve sugerir concessionária para nome inexistente', async ({
+    concessionarias,
+    }) => {
+    const nomeInexistente = 'ZZZConcessionariaInexistente987654';
+
+    await concessionarias.abrir();
+
+    await concessionarias.pesquisar('Euroville');
+
+    await expect(
+        concessionarias.elementos.sugestao('Euroville - Belo Horizonte')
+    ).toBeVisible();
+
+    await concessionarias.pesquisar(nomeInexistente);
+
+    await expect(concessionarias.elementos.campoNome)
+        .toHaveValue(nomeInexistente);
+
+    await expect(concessionarias.elementos.sugestoes)
+        .toHaveCount(0);
+    }
+);

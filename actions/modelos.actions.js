@@ -19,6 +19,10 @@ class ModelosActions {
     async limparFiltros() {
         await this.elementos.limparFiltros.click();
     }
+
+    async preencherPrecoMaximo(valor) {
+        await this.elementos.precoMaximo.fill(valor);
+    }
 }
 
 module.exports = { ModelosActions };

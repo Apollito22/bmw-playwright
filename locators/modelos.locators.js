@@ -22,6 +22,11 @@ class ModelosLocators{
             name: 'Limpar tudo',
             exact: true,
         });
+
+        this.precoMaximo = page.getByRole('spinbutton', {
+            name: 'Até',
+            exact: true,
+        });
     }
 }
 module.exports = {ModelosLocators}

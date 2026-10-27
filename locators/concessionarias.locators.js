@@ -6,6 +6,8 @@ class ConcessionariasLocators {
             name: 'Pesquise o nome do Concessionário',
             exact: true,
         });
+
+        this.sugestoes = page.getByRole('option');
     }
 
     sugestao(nome) {
