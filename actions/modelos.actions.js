@@ -11,6 +11,14 @@ class ModelosActions {
             'https://www.bmw.com.br/pt/all-models.html'
         );
     }
+
+    async filtrarSuv() {
+        await this.elementos.filtroSuv.click();
+    }
+
+    async limparFiltros() {
+        await this.elementos.limparFiltros.click();
+    }
 }
 
 module.exports = { ModelosActions };

@@ -4,6 +4,24 @@ class ModelosLocators{
             name: 'Descubra todos os modelos BMW.',
             exact: true,
         });
+        
+        this.filtroSuv = page.getByRole('button', {
+            name: 'SUV',
+            exact: true,
+        });
+
+        this.modelosSuv = page.getByRole('button', {
+            name: /^SUV\s/,
+        });
+
+        this.modelosSeda = page.getByRole('button', {
+            name: /^Sedã\s/,
+        });
+
+        this.limparFiltros = page.getByRole('link', {
+            name: 'Limpar tudo',
+            exact: true,
+        });
     }
 }
 module.exports = {ModelosLocators}
