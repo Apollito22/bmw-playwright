@@ -2,9 +2,10 @@ class ModelosLocators {
     constructor(page) {
         this.page = page;
 
-        // Estes atributos são publicados pela BMW depois de inicializar os componentes.
         this.catalogo = page.locator('[data-component-path="allmodels-v1"]');
+
         this.gradeModelos = page.locator('[data-component-path="allmodelscontainer-v1"]');
+        
         this.gradeCartoes = page.locator('#idAllModelsCardsContainer');
 
         this.titulo = page.getByRole('heading', {

@@ -12,8 +12,6 @@ class ModelosActions {
             'https://www.bmw.com.br/pt/all-models.html'
         );
 
-        // O botão pode estar visível antes de a BMW registrar seus eventos.
-        // O carregador da BMW marca o componente após executar seu construtor.
         await expect(this.elementos.catalogo).toHaveAttribute(
             'data-initialized', 'true', { timeout: 15000 }
         );
