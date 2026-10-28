@@ -23,6 +23,18 @@ class ModelosActions {
     async preencherPrecoMaximo(valor) {
         await this.elementos.precoMaximo.fill(valor);
     }
+
+    async filtrarEletrico() {
+        await this.elementos.filtroEletrico.click();
+    }
+
+    async abrirDetalhesIx1() {
+        await this.elementos.modeloIx1.click();
+    }
+
+    async fecharDetalhes() {
+        await this.elementos.fecharDetalhes.click();
+    }
 }
 
 module.exports = { ModelosActions };

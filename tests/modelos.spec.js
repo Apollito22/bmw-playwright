@@ -30,10 +30,10 @@ test('deve identificar preço máximo abaixo do mínimo permitido', async ({
     modelos,
 }) => {
     await modelos.abrir();
+    
     await modelos.preencherPrecoMaximo('100');
 
-    await expect(modelos.elementos.precoMaximo)
-        .toHaveValue('100');
+    await expect(modelos.elementos.precoMaximo).toHaveValue('100');
 
     const abaixoDoMinimo = await modelos.elementos.precoMaximo.evaluate(
         campo => campo.validity.rangeUnderflow
@@ -43,12 +43,46 @@ test('deve identificar preço máximo abaixo do mínimo permitido', async ({
 
     await modelos.limparFiltros();
 
-    await expect(modelos.elementos.precoMaximo)
-        .toHaveValue('');
+    await expect(modelos.elementos.precoMaximo).toHaveValue('');
 
     const campoValido = await modelos.elementos.precoMaximo.evaluate(
         campo => campo.validity.valid
     );
 
     expect(campoValido).toBe(true);
+});
+
+test('deve consultar detalhes de um SUV elétrico e limpar filtros', async ({
+    modelos,
+}) => {
+    await modelos.abrir();
+
+    await modelos.filtrarSuv();
+
+    await expect(modelos.elementos.suvsGasolina.first()).toBeVisible();
+
+    await modelos.filtrarEletrico();
+
+    await expect(modelos.elementos.filtroEletrico).toHaveAttribute('aria-pressed', 'true');
+
+    await expect(modelos.elementos.suvsGasolina).toHaveCount(0);
+
+    await expect(modelos.elementos.modeloIx1).toBeVisible();
+
+    await modelos.abrirDetalhesIx1();
+
+
+    await expect(modelos.elementos.linkDetalhesIx1).toBeVisible();
+
+    await expect(modelos.elementos.linkDetalhesIx1).toHaveAttribute('href', /\/bmw-ix1\.html$/);
+
+    await modelos.fecharDetalhes();
+
+    await expect(modelos.elementos.linkDetalhesIx1).toBeHidden();
+
+    await modelos.limparFiltros();
+
+    await expect(modelos.elementos.filtroEletrico).not.toHaveAttribute('aria-pressed', 'true');
+
+    await expect(modelos.elementos.modelosSeda.first()).toBeVisible();
 });
