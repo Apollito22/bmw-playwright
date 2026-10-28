@@ -65,9 +65,9 @@ class ModelosLocators{
     }
 
     modeloPorNome(nome) {
-        return this.page.getByRole('button', {
-            name: nome,
-        });
+        return this.page
+            .getByRole('button', { name: nome })
+            .filter({ hasNotText: 'Condição Especial' });
     }
 }
 module.exports = {ModelosLocators}
