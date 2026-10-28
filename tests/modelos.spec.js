@@ -41,7 +41,7 @@ test('deve identificar preço máximo abaixo do mínimo permitido', async ({
 
     expect(abaixoDoMinimo).toBe(true);
 
-    await modelos.limparFiltros();
+    await modelos.preencherPrecoMaximo('');
 
     await expect(modelos.elementos.precoMaximo).toHaveValue('');
 
@@ -107,7 +107,7 @@ for (const caso of categoriasGasolina) {
         modelos,
     }) => {
         await modelos.abrir();
-        
+
         await modelos.filtrarCategoria(caso.categoria);
 
         await expect(modelos.elementos.filtroCategoria(caso.categoria)).toHaveAttribute('aria-pressed', 'true');
