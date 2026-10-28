@@ -35,6 +35,16 @@ class ModelosActions {
     async fecharDetalhes() {
         await this.elementos.fecharDetalhes.click();
     }
+
+    async filtrarCategoria(nome) {
+        await this.elementos.filtroCategoria(nome).click();
+    }
+
+    async filtrarGasolina() {
+        await this.elementos.filtroGasolina.click();
+    }
 }
+
+
 
 module.exports = { ModelosActions };

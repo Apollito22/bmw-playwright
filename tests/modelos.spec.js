@@ -30,7 +30,7 @@ test('deve identificar preço máximo abaixo do mínimo permitido', async ({
     modelos,
 }) => {
     await modelos.abrir();
-    
+
     await modelos.preencherPrecoMaximo('100');
 
     await expect(modelos.elementos.precoMaximo).toHaveValue('100');
@@ -86,3 +86,54 @@ test('deve consultar detalhes de um SUV elétrico e limpar filtros', async ({
 
     await expect(modelos.elementos.modelosSeda.first()).toBeVisible();
 });
+
+const categoriasGasolina = [
+    {
+        categoria: 'Sedã',
+        modelo: 'BMW 320i GP',
+    },
+    {
+        categoria: 'Coupé',
+        modelo: 'BMW M2 Coupé',
+    },
+    {
+        categoria: 'Cabrio',
+        modelo: 'BMW 420i Cabrio M Sport',
+    },
+];
+
+for (const caso of categoriasGasolina) {
+    test(`deve filtrar ${caso.categoria} a gasolina e limpar filtros`, async ({
+        modelos,
+    }) => {
+        await modelos.abrir();
+        
+        await modelos.filtrarCategoria(caso.categoria);
+
+        await expect(modelos.elementos.filtroCategoria(caso.categoria)).toHaveAttribute('aria-pressed', 'true');
+
+        await expect(modelos.elementos.modelosSuv).toHaveCount(0);
+
+        await modelos.filtrarGasolina();
+
+        await expect(modelos.elementos.filtroGasolina).toHaveAttribute('aria-pressed', 'true');
+
+        const veiculo = modelos.elementos.modeloPorNome(caso.modelo);
+
+        await expect(veiculo).toBeVisible();
+
+        await expect(veiculo).toContainText(caso.categoria);
+
+        await expect(veiculo).toContainText('Gasolina');
+
+        await modelos.limparFiltros();
+
+        await expect(modelos.elementos.filtroCategoria(caso.categoria))
+            .not.toHaveAttribute('aria-pressed', 'true');
+
+        await expect(modelos.elementos.filtroGasolina)
+            .not.toHaveAttribute('aria-pressed', 'true');
+
+        await expect(modelos.elementos.modelosSuv.first()).toBeVisible();
+    });
+}

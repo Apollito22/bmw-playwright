@@ -49,6 +49,25 @@ class ModelosLocators{
         this.suvsGasolina = this.modelosSuv.filter({
             hasText: 'Gasolina',
         });
+
+        this.page = page;
+
+        this.filtroGasolina = page.getByTitle('Gasolina', {
+            exact: true,
+        });
+    }
+
+    filtroCategoria(nome) {
+        return this.page.getByRole('button', {
+            name: nome,
+            exact: true,
+        });
+    }
+
+    modeloPorNome(nome) {
+        return this.page.getByRole('button', {
+            name: nome,
+        });
     }
 }
 module.exports = {ModelosLocators}
