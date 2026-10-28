@@ -1,3 +1,4 @@
+const { expect } = require('@playwright/test');
 const { ModelosLocators } = require('../locators/modelos.locators');
 
 class ModelosActions {
@@ -10,6 +11,15 @@ class ModelosActions {
         await this.page.goto(
             'https://www.bmw.com.br/pt/all-models.html'
         );
+
+        // O botão pode estar visível antes de a BMW registrar seus eventos.
+        // O carregador da BMW marca o componente após executar seu construtor.
+        await expect(this.elementos.catalogo).toHaveAttribute(
+            'data-initialized', 'true', { timeout: 15000 }
+        );
+        await expect(this.elementos.gradeModelos).toHaveAttribute(
+            'data-initialized', 'true', { timeout: 15000 }
+        );
     }
 
     async filtrarSuv() {
@@ -20,20 +30,20 @@ class ModelosActions {
         await this.elementos.limparFiltros.click();
     }
 
-    async preencherPrecoMaximo(valor) {
-        await this.elementos.precoMaximo.fill(valor);
-    }
-
     async filtrarEletrico() {
         await this.elementos.filtroEletrico.click();
     }
 
     async abrirDetalhesIx1() {
         await this.elementos.modeloIx1.click();
+        // Durante a animação, a BMW desativa os cliques na grade.
+        await expect(this.elementos.gradeCartoes).toHaveCSS('pointer-events', 'auto');
     }
 
     async fecharDetalhes() {
+        await expect(this.elementos.gradeCartoes).toHaveCSS('pointer-events', 'auto');
         await this.elementos.fecharDetalhes.click();
+        await expect(this.elementos.linkDetalhesIx1).toBeHidden();
     }
 
     async filtrarCategoria(nome) {
@@ -44,7 +54,5 @@ class ModelosActions {
         await this.elementos.filtroGasolina.click();
     }
 }
-
-
 
 module.exports = { ModelosActions };

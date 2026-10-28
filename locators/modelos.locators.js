@@ -1,5 +1,12 @@
-class ModelosLocators{
-    constructor(page){
+class ModelosLocators {
+    constructor(page) {
+        this.page = page;
+
+        // Estes atributos são publicados pela BMW depois de inicializar os componentes.
+        this.catalogo = page.locator('[data-component-path="allmodels-v1"]');
+        this.gradeModelos = page.locator('[data-component-path="allmodelscontainer-v1"]');
+        this.gradeCartoes = page.locator('#idAllModelsCardsContainer');
+
         this.titulo = page.getByRole('heading', {
             name: 'Descubra todos os modelos BMW.',
             exact: true,
@@ -20,11 +27,6 @@ class ModelosLocators{
 
         this.limparFiltros = page.getByRole('link', {
             name: 'Limpar tudo',
-            exact: true,
-        });
-
-        this.precoMaximo = page.getByRole('spinbutton', {
-            name: 'Até',
             exact: true,
         });
 
@@ -50,9 +52,12 @@ class ModelosLocators{
             hasText: 'Gasolina',
         });
 
-        this.page = page;
-
         this.filtroGasolina = page.getByTitle('Gasolina', {
+            exact: true,
+        });
+
+        this.filtroSerie3 = page.getByRole('button', {
+            name: '3',
             exact: true,
         });
     }
@@ -70,4 +75,4 @@ class ModelosLocators{
             .filter({ hasNotText: 'Condição Especial' });
     }
 }
-module.exports = {ModelosLocators}
+module.exports = { ModelosLocators };
