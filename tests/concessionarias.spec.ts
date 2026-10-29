@@ -1,4 +1,4 @@
-const { test, expect } = require('../fixtures/bmw.fixture');
+import { test, expect } from '../fixtures/bmw.fixture';
 
 test('deve pesquisar uma concessionária pelo nome', async ({
     concessionarias,
@@ -19,12 +19,11 @@ test('deve pesquisar uma concessionária pelo nome', async ({
     await expect(resultado).toBeVisible();
     await expect(resultado).toContainText('Av. Raja Gabaglia');
     await expect(resultado).toContainText('Belo Horizonte');
-    }
-);
+});
 
 test('não deve sugerir concessionária para nome inexistente', async ({
     concessionarias,
-    }) => {
+}) => {
     const nomeInexistente = 'ZZZConcessionariaInexistente987654';
 
     await concessionarias.abrir();
@@ -42,5 +41,4 @@ test('não deve sugerir concessionária para nome inexistente', async ({
 
     await expect(concessionarias.elementos.sugestoes)
         .toHaveCount(0);
-    }
-);
+});

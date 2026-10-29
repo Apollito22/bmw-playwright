@@ -1,13 +1,16 @@
-const { expect } = require('@playwright/test');
-const { ModelosLocators } = require('../locators/modelos.locators');
+import { expect, type Page } from '@playwright/test';
+import { ModelosLocators } from '../locators/modelos.locators';
 
-class ModelosActions {
-    constructor(page) {
+export class ModelosActions {
+    private readonly page: Page;
+    readonly elementos: ModelosLocators;
+
+    constructor(page: Page) {
         this.page = page;
         this.elementos = new ModelosLocators(page);
     }
 
-    async abrir() {
+    async abrir(): Promise<void> {
         await this.page.goto(
             'https://www.bmw.com.br/pt/all-models.html'
         );
@@ -20,37 +23,34 @@ class ModelosActions {
         );
     }
 
-    async filtrarSuv() {
+    async filtrarSuv(): Promise<void> {
         await this.elementos.filtroSuv.click();
     }
 
-    async limparFiltros() {
+    async limparFiltros(): Promise<void> {
         await this.elementos.limparFiltros.click();
     }
 
-    async filtrarEletrico() {
+    async filtrarEletrico(): Promise<void> {
         await this.elementos.filtroEletrico.click();
     }
 
-    async abrirDetalhesIx1() {
+    async abrirDetalhesIx1(): Promise<void> {
         await this.elementos.modeloIx1.click();
-        // Durante a animação, a BMW desativa os cliques na grade.
         await expect(this.elementos.gradeCartoes).toHaveCSS('pointer-events', 'auto');
     }
 
-    async fecharDetalhes() {
+    async fecharDetalhes(): Promise<void> {
         await expect(this.elementos.gradeCartoes).toHaveCSS('pointer-events', 'auto');
         await this.elementos.fecharDetalhes.click();
         await expect(this.elementos.linkDetalhesIx1).toBeHidden();
     }
 
-    async filtrarCategoria(nome) {
+    async filtrarCategoria(nome: string): Promise<void> {
         await this.elementos.filtroCategoria(nome).click();
     }
 
-    async filtrarGasolina() {
+    async filtrarGasolina(): Promise<void> {
         await this.elementos.filtroGasolina.click();
     }
 }
-
-module.exports = { ModelosActions };

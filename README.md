@@ -1,7 +1,7 @@
 # Automação de testes web — BMW Brasil
 
 Trabalho da disciplina de Testes de Software, desenvolvido com
-Playwright e JavaScript.
+Playwright e TypeScript, seguindo a base de código disponibilizada em aula.
 
 ## Integrantes
 
@@ -26,7 +26,11 @@ concessionárias e cenários negativos.
 - `fixtures/`: disponibiliza os objetos usados pelos testes.
 - `tests/`: contém os cenários e suas validações.
 - `.github/workflows/`: configura a execução no GitHub Actions.
-- `playwright.config.js`: configura navegadores e execução.
+- `playwright.config.ts`: configura navegadores e execução.
+- `tsconfig.json`: configura a checagem estrita dos tipos.
+
+Todo o código-fonte de locators, actions, fixtures, testes e configuração
+do Playwright está em arquivos `.ts`.
 
 ## Cenários e interações
 
@@ -68,11 +72,28 @@ git clone https://github.com/Apollito22/bmw-playwright.git &&
 cd bmw-playwright &&
 npm ci &&
 npx playwright install --with-deps chromium &&
+npm run typecheck &&
 npx playwright test --project=chromium --workers=1
 ```
 
 Esse bloco deve ser executado em uma pasta onde ainda não exista uma
 pasta `bmw-playwright`. Não é necessário clonar novamente para cada execução.
+
+## Checagem de TypeScript
+
+Antes de executar os testes, confira os tipos:
+
+```bash
+npm run typecheck
+```
+
+Esse comando executa `tsc --noEmit`: verifica os tipos e não gera arquivos
+JavaScript. O projeto utiliza `Page`, `Locator`, propriedades `readonly`,
+parâmetros e retornos tipados e fixtures com tipos explícitos.
+
+O Playwright transforma TypeScript para executar, mas não faz a checagem
+de tipos por conta própria. A checagem separada também é executada na pipeline.
+Referência: [TypeScript no Playwright](https://playwright.dev/docs/test-typescript).
 
 ## Execução
 
@@ -103,8 +124,9 @@ relatórios de cada execução, use o script de verificação:
 bash scripts/verificar-readme.sh
 ```
 
-O segundo comando abre os navegadores, portanto deve ser executado em uma
-sessão gráfica. O script executa as três etapas mesmo se alguma falhar e
+O script primeiro verifica os tipos e só continua se não houver erros de
+TypeScript. O segundo comando abre os navegadores, portanto deve ser executado
+em uma sessão gráfica. O script executa as três etapas de navegador mesmo se alguma falhar e
 retorna código diferente de zero quando houver falhas. Cada relatório fica
 na pasta `.validacao/`, que não entra no Git.
 
@@ -119,7 +141,7 @@ npx playwright show-report
 O GitHub Actions executa os testes automaticamente nos pushes e
 pull requests destinados às branches main e master.
 
-A pipeline instala as dependências, instala os navegadores,
+A pipeline instala as dependências, verifica os tipos de TypeScript, instala os navegadores,
 executa os testes e disponibiliza o relatório HTML como artefato.
 
 O resultado pode ser consultado na aba Actions do repositório.
@@ -127,6 +149,9 @@ O resultado pode ser consultado na aba Actions do repositório.
 ## Decisões técnicas
 
 - Separação entre locators, actions, fixtures e testes.
+- Classes de locators com propriedades `readonly` do tipo `Locator` e
+  construtores que recebem `Page`, como no exemplo do professor.
+- Actions com parâmetros e retornos tipados e fixtures com seus tipos declarados.
 - Seletores por papel, nome acessível e atributo title.
 - Esperas automáticas do Playwright e validações com expect.
 - Abertura do catálogo aguarda `data-initialized="true"` nos componentes
@@ -154,3 +179,21 @@ dos testes.
 
 O repositório deve permanecer privado, com acesso restrito aos
 integrantes da dupla e ao professor.
+
+## Relação com os requisitos do trabalho
+
+| Requisito | Evidência no projeto |
+|---|---|
+| Caminho feliz | SUV elétrico, detalhes do iX1, fechamento e limpeza |
+| Pesquisa com validação | Sugestão de concessionária, seleção e endereço |
+| Dois cenários negativos | Nome inexistente e combinação SUV/Série 3 indisponível |
+| Validações de comportamento e resultados | Asserções com `expect` nos nove cenários |
+| Pelo menos 20 interações | 22 cliques/preenchimentos por navegador, detalhados acima |
+| Organização e reutilização | Locators, actions, fixtures e casos parametrizados |
+| Git e pipeline | Histórico de commits e workflow no GitHub Actions |
+| Base em TypeScript da aula | Classes tipadas, `Page`, `Locator`, `readonly` e imports/exports |
+
+Antes da entrega, conferir no GitHub se o repositório continua privado,
+se os dois integrantes e o professor possuem acesso e se a pipeline do
+último commit passou. A apresentação deve incluir a execução dos testes,
+a estrutura do projeto, os resultados e a explicação das decisões técnicas.

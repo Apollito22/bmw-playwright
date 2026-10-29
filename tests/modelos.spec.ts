@@ -1,4 +1,4 @@
-const { test, expect } = require('../fixtures/bmw.fixture');
+import { test, expect } from '../fixtures/bmw.fixture';
 
 test('deve abrir o catálogo de modelos da BMW', async ({ modelos }) => {
     await modelos.abrir();
@@ -87,7 +87,12 @@ test('deve consultar detalhes de um SUV elétrico e limpar filtros', async ({
     await expect(modelos.elementos.modelosSeda.first()).toBeVisible();
 });
 
-const categoriasGasolina = [
+type CasoCategoriaGasolina = {
+    categoria: 'Sedã' | 'Coupé' | 'Cabrio';
+    modelo: string;
+};
+
+const categoriasGasolina: CasoCategoriaGasolina[] = [
     {
         categoria: 'Sedã',
         modelo: 'BMW 320i GP',

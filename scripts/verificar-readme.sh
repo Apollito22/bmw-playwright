@@ -11,6 +11,14 @@ mkdir -p "$BMW_RUN_DIR"
 BMW_FAILURES=0
 printf 'etapa\tcodigo_de_saida\n' > "$BMW_RUN_DIR/resumo.tsv"
 
+# O Playwright transforma TS para executar, mas a checagem de tipos é separada.
+npm run typecheck 2>&1 | tee "$BMW_RUN_DIR/typecheck.log"
+BMW_TYPECHECK_STATUS="${PIPESTATUS[0]}"
+if [ "$BMW_TYPECHECK_STATUS" -ne 0 ]; then
+    printf 'A checagem de TypeScript falhou. Corrija os tipos antes dos testes.\n'
+    exit "$BMW_TYPECHECK_STATUS"
+fi
+
 executar() {
     local bmw_etapa="$1"
     shift
