@@ -23,4 +23,13 @@ export class ConcessionariasActions {
     async selecionar(nome: string): Promise<void> {
         await this.elementos.sugestao(nome).click();
     }
+
+    async reabrirSugestoes(): Promise<void> {
+        const campo = this.elementos.campoNome;
+
+        // Fechar o consentimento pode tirar o foco e recolher as sugestões.
+        if (await campo.isVisible() && await campo.inputValue()) {
+            await campo.press('ArrowDown');
+        }
+    }
 }

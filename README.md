@@ -47,6 +47,8 @@ do Playwright está em arquivos `.ts`.
 
 A contagem considera uma execução dos nove testes em um navegador.
 Navegações e validações não foram incluídas nas 22 interações.
+O tratamento eventual de cookies e a reabertura das sugestões com o teclado
+também ficam fora dessa contagem; são etapas de preparação da página.
 
 Os cenários negativos verificam:
 - Ausência de sugestões para um nome fictício inexistente.
@@ -154,6 +156,15 @@ O resultado pode ser consultado na aba Actions do repositório.
 - Actions com parâmetros e retornos tipados e fixtures com seus tipos declarados.
 - Seletores por papel, nome acessível e atributo title.
 - Esperas automáticas do Playwright e validações com expect.
+- As fixtures registram o tratamento do aviso de cookies antes da navegação,
+  usando `page.addLocatorHandler`. Se o aviso aparecer, inclusive com atraso,
+  a automação clica em "Aceitar tudo" e aguarda o painel desaparecer.
+  A escolha vale para o contexto isolado daquele teste, que é descartado
+  ao final da execução; não é salva como um perfil pessoal do navegador.
+- Se o aviso interromper uma pesquisa de concessionária, as sugestões são
+  reabertas com `ArrowDown`, pois o painel pode ter retirado o foco do campo.
+  A sugestão esperada tem até 15 segundos para aparecer; a pesquisa, a seleção
+  e as validações de endereço continuam obrigatórias.
 - Abertura do catálogo aguarda `data-initialized="true"` nos componentes
   de filtros e cartões antes de permitir os cliques. Esse atributo é
   definido pelo carregador da própria BMW após a inicialização.
@@ -163,6 +174,9 @@ O resultado pode ser consultado na aba Actions do repositório.
   catálogo normal, evitando resultados duplicados para o mesmo nome.
 - Testes parametrizados para reutilizar o roteiro entre categorias.
 - Cenários independentes, sem depender da execução de outro teste.
+
+Referência do tratamento de sobreposições:
+[page.addLocatorHandler](https://playwright.dev/docs/api/class-page#page-add-locator-handler).
 
 ## Cuidados e limitações
 

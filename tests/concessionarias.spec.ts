@@ -10,7 +10,7 @@ test('deve pesquisar uma concessionária pelo nome', async ({
 
     await expect(
         concessionarias.elementos.sugestao(nome)
-    ).toBeVisible();
+    ).toBeVisible({ timeout: 15_000 });
 
     await concessionarias.selecionar(nome);
 
@@ -32,7 +32,7 @@ test('não deve sugerir concessionária para nome inexistente', async ({
 
     await expect(
         concessionarias.elementos.sugestao('Euroville - Belo Horizonte')
-    ).toBeVisible();
+    ).toBeVisible({ timeout: 15_000 });
 
     await concessionarias.pesquisar(nomeInexistente);
 
